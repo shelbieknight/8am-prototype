@@ -1565,7 +1565,7 @@
         <div class="empty-state" id="emptyState">
           <div class="empty-icon">✉️</div>
           <div class="empty-title">No update drafted yet</div>
-          <div class="empty-sub">Select recent case activities from the left panel, then click Draft Update to generate a client-ready message</div>
+          <div class="empty-sub" id="emptyStateSub">Select recent case activities, then click <strong>Draft Update</strong> to generate a client-ready message</div>
         </div>
 
         <!-- LOADING STATE (hidden) -->
@@ -1803,10 +1803,21 @@ Will contact you upon response.
     updateSummaryBar();
   }
 
+  // Responsive empty state copy
+  function updateEmptyStateCopy() {
+    const el = document.getElementById('emptyStateSub');
+    if (!el) return;
+    const direction = window.innerWidth <= 768 ? 'above' : 'in the left panel';
+    el.innerHTML = `Select recent case activities ${direction}, then click <strong>Draft Update</strong> to generate a client-ready message`;
+  }
+
+  window.addEventListener('resize', updateEmptyStateCopy);
+
   // Arrow key navigation for activity list
   document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.getElementById('draftTextarea');
     if (textarea) textarea.addEventListener('input', updateCharCount);
+    updateEmptyStateCopy();
 
     document.getElementById('activityList').addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
